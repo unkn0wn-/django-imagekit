@@ -86,7 +86,7 @@ class ModelSignalRouter(object):
         for src in self._source_groups:
             if isinstance(instance, src.model_class):
                 try:
-                    result[src.image_field] = reduce(getattr, src.image_field, instance)
+                    result[src.image_field] = reduce(getattr, src.image_field.split('.'), instance)
                 except AttributeError:
                     result[src.image_field] = None
         return result
