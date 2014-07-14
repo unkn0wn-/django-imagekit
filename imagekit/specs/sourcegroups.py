@@ -82,8 +82,14 @@ class ModelSignalRouter(object):
         keys are the field names and values are the fields themselves.
 
         """
-        return dict((src.image_field, getattr(instance, src.image_field)) for
-                src in self._source_groups if isinstance(instance, src.model_class))
+        result = dict()
+        for src in self._source_groups:
+            if isinstance(instance, src.model_class):
+                try:
+                    result[src.image_field] = reduce(getattr, src.image_field, instance)
+                except AttributeError:
+                    result[src.image_field] = None
+        return result
 
     @ik_model_receiver
     def post_save_receiver(self, sender, instance=None, created=False, raw=False, **kwargs):
