@@ -11,7 +11,7 @@ class ImageSpecFileDescriptor(object):
         if instance is None:
             return self.field
         else:
-            source = reduce(getattr, self.source_field_name, instance)
+            source = reduce(getattr, self.source_field_name.split('.'), instance)
             spec = self.field.get_spec(source=source)
             file = ImageCacheFile(spec)
             instance.__dict__[self.attname] = file
